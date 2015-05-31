@@ -13,15 +13,23 @@ google-youtube {
 }
 
 v1{
-    opacity: 1;
+    opacity: 1.00;
 }
 
 v2{
-    opacity: 0.5;
+    opacity: 0.50;
 }
 
 v3{
-    opacity: 0.4;
+    opacity: 0.40;
+}
+
+.flipY {
+    transform: rotateY(180deg);
+}
+
+.flipX {
+    transform: rotateX(180deg);
 }
 
 /*
@@ -49,4 +57,48 @@ v3{
     -webkit-animation: bg-colorchange 59s ease infinite;
     -moz-animation: bg-colorchange 59s ease infinite;
     animation: bg-colorchange 59s ease infinite;
+}
+
+.dg.main {
+    margin-right: 0px;
+}
+
+/*div.dg.ac ul {
+    opacity: 0.8;
+}*/
+
+/*.dg .c select {
+    opacity:0.88;
+}*/
+
+.dg .cr {
+    opacity: 0.58;
+}
+
+option {
+    background-color: #C2C2C2;
+    opacity: 0.75;
+}
+
+.close-button {
+    opacity: 0.2;
+}
+
+li.title {
+    opacity: 0.5;
+}
+
+.wtf {
+  animation: wtf 24s ease-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes wtf {
+  0%,
+  100% {
+    -webkit-filter: blur(0px) brightness(none) hue-rotate(0deg) saturate(none);
+  }
+  50% {
+    -webkit-filter: brightness(2) hue-rotate(180deg) saturate(4) blur(2px);
+  }
 }

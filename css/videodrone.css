@@ -1,0 +1,52 @@
+﻿body {
+    overflow:hidden;
+    padding: 0;
+    margin: 0; 
+}
+
+google-youtube {
+    position:absolute;
+    opacity:0.5;
+    mix-blend-mode: screen;
+    width:100%;
+    height:100%;
+}
+
+v1{
+    opacity: 1;
+}
+
+v2{
+    opacity: 0.5;
+}
+
+v3{
+    opacity: 0.4;
+}
+
+/*
+@-webkit-keyframes bg-colorchange {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes bg-colorchange {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+*/
+
+@keyframes bg-colorchange { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+#bg-container {
+    background: linear-gradient(270deg, #e425bb, #00b9ff, #5707dd, #ff5e79, #00fdd2);
+    background-size: 1000% 1000%;
+    -webkit-animation: bg-colorchange 59s ease infinite;
+    -moz-animation: bg-colorchange 59s ease infinite;
+    animation: bg-colorchange 59s ease infinite;
+}

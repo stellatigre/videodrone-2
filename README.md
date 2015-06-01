@@ -8,4 +8,5 @@ built on the `<google-youtube>` polymer component & `dat.gui`
 * set blend mode
 * set play speed
 * flip layers on X and Y axes
+* blur, saturation, contrast, brightness, hue
 

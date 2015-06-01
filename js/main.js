@@ -3,25 +3,6 @@ var getQueryParameters = function (str) {
     return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
 }
 
-// yeah i know jquery has it
-function toggleClass(element, className) {
-    if (element.classList.contains(className)) {
-        element.classList.add(className);
-    } else {
-        v2.classList.remove(className);
-    }
-}
-
-function engageFlipMode(element, mode) {
-    switch (mode) {
-        case "none": break;
-        case "X":
-            element.classList.toggle("flipX"); break;
-        case "Y":
-            element.classList.toggle("flipY"); break;
-    }       
-}
-
 // modifying CSS values with dat.gui is hard because it won't initialize numerical controls normally,
 // based on element.style.property returning a string representation of the number, so this is here,
 // and it polls on a setInterval to update stuff.  doesn't seem to noticeably impact performance
@@ -36,8 +17,8 @@ var guiWrapper = function () {
         this['v' + i].filters = {};
         /*this['v' + i].filters.hueRotate = 0;
         this['v' + i].filters.blur = 0;
-        this['v' + i].filters.contrast = 0;
-        this['v' + i].filters.saturation = 0;*/
+        this['v' + i].filters.contrast = 1;
+        this['v' + i].filters.saturation = 1;*/
         //this['v' + i].videoId = "";
     }
 };
@@ -46,10 +27,9 @@ var opts = new guiWrapper();
 
 function makeDatGUI() { 
     gui = new dat.GUI();
-    flipX = [];                         // array so we can establish seperate event handlers
-    flipY = [];
+    flipX = [];                             // arrays so we can establish seperate event handlers
+    flipY = [];                             // for the flip X and flip Y controls
     for (var i = 1; i <= 3; i++) {
-        console.log(i);
         var v = gui.addFolder('video ' + i);
         //v.add(opts['v' + i], 'videoId').name("video id").listen();
         v.add(opts['v' + i], 'opacity', 0, 1).name("opacity");
@@ -63,29 +43,20 @@ function makeDatGUI() {
         flipY[i-1] = flipModes.add(opts['v' + i], 'flipY').name("Y");
 
         //var filters = v.addFolder('filters');
+        //filters.add(opts['v' + i], 'saturation', 0, 10).step(0.1).name("play speed");
         v.open();
     }
 
-    // why doesn't this work in a for loop !? plz fix this.  mods ?
-    flipX[0].onChange(function (value) {
-        frames[0].classList.toggle("flipX");
+    flipX.forEach(function (element, i) {
+        element.onChange(function (value) {
+            frames[i].classList.toggle("flipX");
+        })
     });
-    flipX[1].onChange(function (value) {
-        frames[1].classList.toggle("flipX");
-    });
-    flipX[2].onChange(function (value) {
-        frames[2].classList.toggle("flipX");
-    });
-
-    flipY[0].onChange(function (value) {
-        frames[0].classList.toggle("flipY");
-    });
-    flipY[1].onChange(function (value) {
-        frames[1].classList.toggle("flipY");
-    });
-    flipY[2].onChange(function (value) {
-        frames[2].classList.toggle("flipY");
-    });
+    flipY.forEach(function (element, i) {
+        element.onChange(function (value) {
+            frames[i].classList.toggle("flipY");
+        })
+    })
 }
 
 var videoDefaults = ["ggLTPyRXUKc", "ZC5U9Pwd0kg", "A9grEa_zSIc"];
@@ -101,43 +72,20 @@ var frames = Array.prototype.slice.call(document.querySelectorAll('google-youtub
 frames.forEach(function (element, i) {
     element.videoId = IDs[i];
     element.addEventListener("google-youtube-ready", function () {
-        console.log("player ready");
+        console.log("player " + i + " ready");
         element.mute();
     });
 });
-
 
 // &gui=no in URL to disable gui
 if (params.gui !== "no") {
     makeDatGUI();
 }
-/*frames.forEach(function (e,i) {
-    opts['v' + i].videoId = e.videoId;
-})*/
 
 var updateValues = setInterval(function () {
-    /*frames.forEach(function (element, i) {
-        console.log(element.style.opacity);
-        element.style.opacity = opts['v' + i].opacity;
-        element.style.mixBlendMode = opts['v' + i].blendMode;
-        element._player.setPlaybackRate(opts['v' + i].playSpeed);
-        if (opts['v' + i].videoId != element.videoId) {
-            element.videoId = opts['v' + i].videoId;
-        };
-    });*/
-    v1.style.opacity = opts.v1.opacity;
-    v1.style.mixBlendMode = opts.v1.blendMode;
-    v1._player.setPlaybackRate(opts.v1.playSpeed);
-    //v1.videoId = opts.v1.videoId;
-
-    v2.style.opacity = opts.v2.opacity;
-    v2.style.mixBlendMode = opts.v2.blendMode;
-    v2._player.setPlaybackRate(opts.v2.playSpeed);
-
-    //v2.videoId = opts.v2.videoId;
-
-    v3.style.opacity = opts.v3.opacity;
-    v3.style.mixBlendMode = opts.v3.blendMode;
-    v3._player.setPlaybackRate(opts.v3.playSpeed);
-    //v3.videoId = opts.v3.videoId;
+    for (var i = 1; i <= 3; i++) {
+        frames[i-1].style.opacity = opts['v' + i].opacity;
+        frames[i-1].style.mixBlendMode = opts['v' + i].blendMode;
+        frames[i-1]._player.setPlaybackRate(opts['v' + i].playSpeed);
+    }
 }, 33);

@@ -1,4 +1,4 @@
-var gui, flipX, flipY;
+var gui;
 
 function getQueryParameters (str) {
     return (str || document.location.search).replace(/(^\?)/, '').split("&")
@@ -10,7 +10,8 @@ function getQueryParameters (str) {
 // and it polls on a setInterval to update stuff from dat.gui to the FX.  doesn't seem impact performance much
 var guiDataWrapper = function () {
     for (var i = 1; i <= 3; i++) {
-        this[i] = {                                                
+        this[i] = {
+            videoId: "",
             opacity : 0.69,
             blendMode : "screen",
             playSpeed : 1,
@@ -44,11 +45,12 @@ function updateLayerFilter(layer, filters) {
 
 function makeDatGUI() { 
     gui = new dat.GUI();
-    flipX = [];                             // arrays so we can establish seperate event handlers
-    flipY = [];                             // for the flip X and flip Y controls
+    var flipX = [];                             // arrays so we can establish seperate event handlers
+    var flipY = [];                             // for the flip X and flip Y controls
+    var idFields = [];
     for (var i = 1; i <= 3; i++) {
         var v = gui.addFolder('video ' + i);
-        //v.add(opts[i], 'videoId').name("video id").listen();
+        idFields[i-1] = v.add(opts[i], 'videoId').name("video id");
         v.add(opts[i], 'opacity', 0, 1).name("opacity");
         v.add(opts[i], 'blendMode',
             ["screen", "multiply", "soft-light", "hard-light", "hue", "overlay", "difference", "luminosity", "color-burn", "color-dodge"]
@@ -69,6 +71,11 @@ function makeDatGUI() {
         v.open();
     }
 
+    idFields.forEach(function (element, i) {                                                    // these events handle 
+        element.onFinishChange(function (value) {                                               // live video loading
+            frames[i]._player.loadVideoById(value)
+        })
+    })
     flipX.forEach(function (element, i) {                                                       // these didn't work in 
         element.onChange(function (value) {                                                     // the above for loop
             frames[i].classList.toggle("flipX");                                                // but they work great 
@@ -93,7 +100,10 @@ if (params.ids === undefined) {
 // assign videos to layers and mute them when they load
 var frames = Array.prototype.slice.call(document.querySelectorAll('google-youtube'));
 frames.forEach(function (element, i) {
-    element.videoId = IDs[i];
+    console.log(i);
+    console.log(opts);
+    opts[i+1].videoId = element.videoId = IDs[i];
+    //opts[i+1].videoId = IDs[i];
     element.addEventListener("google-youtube-ready", function () {
         console.log("player " + i + " ready");
         element.mute();

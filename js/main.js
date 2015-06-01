@@ -66,7 +66,7 @@ function makeDatGUI() {
         v.open();
     }
 
-    // why doesn't this work in a for loop !?!? plz fix this 
+    // why doesn't this work in a for loop !? plz fix this.  mods ?
     flipX[0].onChange(function (value) {
         frames[0].classList.toggle("flipX");
     });
@@ -89,7 +89,7 @@ function makeDatGUI() {
 }
 
 var videoDefaults = ["ggLTPyRXUKc", "ZC5U9Pwd0kg", "A9grEa_zSIc"];
-var params = getQueryParameters(window.location.search);
+var params = getQueryParameters(decodeURIComponent(window.location.search));
 
 if (params.ids === undefined) {
     var IDs = videoDefaults;            // default to a set i think looks cool if no IDs, will change

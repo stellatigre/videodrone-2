@@ -1,6 +1,6 @@
 # videodrone
 video blender for youtube.  
-built on the `<google-youtube>` polymer component & `dat.gui`
+built on the `<google-youtube>` polymer component, `dat.gui`, and CSS3 filters
 
 ##Current video maniplation features include:
 (all abilities on a per layer basis)

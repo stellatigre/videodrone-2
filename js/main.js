@@ -1,30 +1,33 @@
 var gui, flipX, flipY;
-var getQueryParameters = function (str) {
-    return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+
+function getQueryParameters (str) {
+    return (str || document.location.search).replace(/(^\?)/, '').split("&")
+                .map(function (n) { return n = n.split("="), this[n[0]] = n[1], this }.bind({}))[0];
 }
 
 // modifying CSS values with dat.gui is hard because it won't initialize numerical controls normally,
 // based on element.style.property returning a string representation of the number, so this is here,
-// and it polls on a setInterval to update stuff.  doesn't seem to noticeably impact performance
-var guiWrapper = function () {
+// and it polls on a setInterval to update stuff from dat.gui to the FX.  doesn't seem impact performance much
+var guiDataWrapper = function () {
     for (var i = 1; i <= 3; i++) {
-        this[i] = {};
-        this[i].opacity = 0.69;
-        this[i].blendMode = "screen";
-        this[i].playSpeed = 1;
-        this[i].flipX = false;
-        this[i].flipY = false;
-        this[i].filters = {};
-        this[i].filters.hueRotate = 0;
-        this[i].filters.blur = 0;
-        this[i].filters.contrast = 1;
-        this[i].filters.saturation = 1;
-        this[i].filters.brightness = 1;
-        //this[i].videoId = "";
+        this[i] = {                                                
+            opacity : 0.69,
+            blendMode : "screen",
+            playSpeed : 1,
+            flipX : false,
+            flipY : false
+        }
+        this[i].filters = {
+            hueRotate : 0,
+            blur : 0,
+            contrast : 1,
+            saturation : 1,
+            brightness : 1,
+        }
     }
 };
 
-var opts = new guiWrapper();
+var opts = new guiDataWrapper();
 
 function updateLayerFilter(layer, filters) {
     var filterBase = "hue-rotate(0deg) blur(0px) contrast(1) saturate(1) brightness(1)";
@@ -36,6 +39,7 @@ function updateLayerFilter(layer, filters) {
         .replace("blur(0px)", "blur(" + filters.blur + "px)");
 
     layer.style['-webkit-filter'] = filterString;
+    //layer.style['filter'] = filterString;
 }
 
 function makeDatGUI() { 
@@ -51,22 +55,24 @@ function makeDatGUI() {
         ).name("blend mode");
 
         v.add(opts[i], 'playSpeed', [0.25, 0.5, 1, 1.25, 1.5, 2]).name("play speed");
-        var flipModes = v.addFolder('flip');
-        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("X");
-        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("Y");
 
-        var filters = v.addFolder('filters');
+        var flipModes = v.addFolder('flip');                                                    // all transform effects go here
+        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("X");                                         
+        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("Y");                                         
+
+        var filters = v.addFolder('filters');                                                   // filters all go under this
         filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
         filters.add(opts[i].filters, 'contrast', 0, 10).step(0.1).name("contrast");
+        filters.add(opts[i].filters, 'brightness', 0, 10).step(0.1).name("brightness");
         filters.add(opts[i].filters, 'hueRotate', 0, 360).step(1).name("hue");
         filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
         v.open();
     }
 
-    flipX.forEach(function (element, i) {
-        element.onChange(function (value) {
-            frames[i].classList.toggle("flipX");
-        })
+    flipX.forEach(function (element, i) {                                                       // these didn't work in 
+        element.onChange(function (value) {                                                     // the above for loop
+            frames[i].classList.toggle("flipX");                                                // but they work great 
+        })                                                                                      // like this, so *shrug*
     });
     flipY.forEach(function (element, i) {
         element.onChange(function (value) {
@@ -76,7 +82,7 @@ function makeDatGUI() {
 }
 
 var videoDefaults = ["ggLTPyRXUKc", "ZC5U9Pwd0kg", "A9grEa_zSIc"];
-var params = getQueryParameters(decodeURIComponent(window.location.search));        // get our parameters from the UI
+var params = getQueryParameters(decodeURIComponent(window.location.search));        // get our parameters from the URL
 
 if (params.ids === undefined) {
     var IDs = videoDefaults;            // default to a set i think looks cool if no IDs, will change
@@ -107,4 +113,10 @@ var updateValues = setInterval(function () {
         frames[i - 1]._player.setPlaybackRate(opts[i].playSpeed);
         updateLayerFilter(frames[i - 1], opts[i].filters)
     }
-}, 33);
+}, 40);                                                                     // currently updates 25 times / second
+
+
+// SVG experiments
+
+//-webkit-filter=
+var svgFilter = "url(#half-tone)"

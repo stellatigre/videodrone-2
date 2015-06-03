@@ -12,6 +12,7 @@ built on the `<google-youtube>` polymer component, `dat.gui`, and CSS3 filters
 
 
 You can load new videos simply by placing them in the "video id" fields in the GUI.  
-querystring values are accepted in a comma-separated list, like:
+you can specify video IDs in the querystring. Values are accepted in a comma-separated list, like:
+
 `?ids=qmFCxp_pk7g,ZC5U9Pwd0kg,A9grEa_zSIc`
 

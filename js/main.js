@@ -31,8 +31,7 @@ var guiDataWrapper = function () {
 var opts = new guiDataWrapper();
 
 function updateLayerFilter(layer, filters) {
-    var filterBase = "hue-rotate(0deg) blur(0px) contrast(1) saturate(1) brightness(1)";
-    layer.style.webkitFilter = filterBase
+    layer.style.webkitFilter = "hue-rotate(0deg) blur(0px) contrast(1) saturate(1) brightness(1)"
         .replace("hue-rotate(0deg)", "hue-rotate(" + filters.hueRotate + "deg)")
         .replace("brightness(1", "brightness(" + filters.brightness)
         .replace("saturate(1", "saturate(" + filters.saturation)
@@ -71,7 +70,7 @@ function makeDatGUI() {
 
     idFields.forEach(function (element, i) {                                                    // these events handle 
         element.onFinishChange(function (value) {                                               // live video loading
-            if (/youtube\.com\/watch\?v=*/.test(value) === true) {               // try to support full links
+            if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
                 value = /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
             }                                                                                              
             frames[i]._player.loadVideoById(value)

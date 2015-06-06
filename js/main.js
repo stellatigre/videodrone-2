@@ -109,6 +109,12 @@ frames.forEach(function (element, i) {
         element._player.setLoop(true)                               // why doesn't this work, seriously ?
         element.mute();
     });
+    // actual working looping
+    element.addEventListener("google-youtube-state-change", function (value) {
+        if (value.detail.data === 0) {
+            this.play();                                            // play on end to loop
+        }
+    });
 });
 
 makeDatGUI();   

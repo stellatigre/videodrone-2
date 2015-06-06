@@ -56,7 +56,7 @@ function makeDatGUI() {
         v.add(opts[i], 'playSpeed', [0.25, 0.5, 1, 1.25, 1.5, 2]).name("play speed");
         v.open();
 
-        var flipModes = v.addFolder('flip mode');                                                    // all transform effects go here
+        var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
         flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");                                         
         flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");                                         
 

@@ -43,6 +43,7 @@ function makeDatGUI() {
     gui = new dat.GUI();
     var flipX = [];                             // arrays so we can establish seperate event handlers
     var flipY = [];                             // for the flip X and flip Y controls
+    var filters = [];
     var idFields = [];
     for (var i = 1; i <= 3; i++) {
         var v = gui.addFolder('video ' + i);
@@ -59,15 +60,24 @@ function makeDatGUI() {
         var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
         flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");                                         
         flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");                                         
-
-        var filters = v.addFolder('filters');                                                   // filters all go under this
-        filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
-        filters.add(opts[i].filters, 'contrast', 0, 10).step(0.1).name("contrast");
-        filters.add(opts[i].filters, 'brightness', 0, 10).step(0.1).name("brightness");
-        filters.add(opts[i].filters, 'hueRotate', 0, 360).step(1).name("hue");
-        filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
+    
+        var filterControls = v.addFolder('filters');
+        filters[i] = {                                                                      
+            saturation : filterControls.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation"),
+            contrast   : filterControls.add(opts[i].filters, 'contrast', 0, 10).step(0.1).name("contrast"),
+            brightness : filterControls.add(opts[i].filters, 'brightness', 0, 10).step(0.1).name("brightness"),
+            hueRotate  : filterControls.add(opts[i].filters, 'hueRotate', 0, 360).step(1).name("hue"),
+            blur       : filterControls.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur")
+        }
     }
 
+    frames.forEach(function (element, i) {
+        for (var effect in filters[i+1]) {
+            filters[i+1][effect].onChange(function (value) {
+                updateLayerFilter(frames[i], opts[i+1].filters);
+            });
+        }
+    });
     idFields.forEach(function (element, i) {                                                    // these events handle 
         element.onFinishChange(function (value) {                                               // live video loading
             if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
@@ -125,7 +135,6 @@ var updateValues = setInterval(function () {
         frames[i-1].style.opacity = opts[i].opacity;
         frames[i-1].style.mixBlendMode = opts[i].blendMode;
         frames[i - 1]._player.setPlaybackRate(opts[i].playSpeed);
-        updateLayerFilter(frames[i - 1], opts[i].filters)
     }
 }, 40);                                                                     // currently updates 25 times / second
 

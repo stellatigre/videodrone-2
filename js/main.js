@@ -72,6 +72,9 @@ function makeDatGUI() {
         element.onFinishChange(function (value) {                                               // live video loading
             if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
                 value = /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
+            } 
+            else if (/youtu\.be/.test(value) === true) {
+                value = /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];    
             }                                                                                              
             frames[i]._player.loadVideoById(value)
         })

@@ -30,16 +30,17 @@ var guiDataWrapper = function () {
 
 var opts = new guiDataWrapper();
 
-function updateLayerFilter(layer, filters) {
-    layer.style.webkitFilter = "hue-rotate(0deg) blur(0px) contrast(1) saturate(1) brightness(1)"
-        .replace("hue-rotate(0", "hue-rotate(" + filters.hueRotate)
-        .replace("brightness(1", "brightness(" + filters.brightness)
-        .replace("saturate(1", "saturate(" + filters.saturation)
-        .replace("contrast(1", "contrast(" + filters.contrast)
-        .replace("blur(0", "blur(" + filters.blur);
+
+function updateFilter(layer, filters) {
+    layer.style.webkitFilter =
+        `hue-rotate(${filters.hueRotate}deg) ` +
+        `brightness(${filters.brightness}) ` +
+        `saturate(${filters.saturation}) ` +
+        `contrast(${filters.contrast}) ` +
+        `blur(${filters.blur})`
 }
 
-function makeDatGUI() { 
+function makeDatGUI() {
     gui = new dat.GUI();
     var flipX = [];                             // arrays so we can establish seperate event handlers
     var flipY = [];                             // for the flip X and flip Y controls
@@ -57,8 +58,8 @@ function makeDatGUI() {
         v.open();
 
         var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
-        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");                                         
-        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");                                         
+        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");
+        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");
 
         var filters = v.addFolder('filters');                                                   // filters all go under this
         filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
@@ -68,21 +69,21 @@ function makeDatGUI() {
         filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
     }
 
-    idFields.forEach(function (element, i) {                                                    // these events handle 
+    idFields.forEach(function (element, i) {                                                    // these events handle
         element.onFinishChange(function (value) {                                               // live video loading
             if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
                 value = /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
-            } 
+            }
             else if (/youtu\.be/.test(value) === true) {
-                value = /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];    
-            }                                                                                              
+                value = /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];
+            }
             frames[i]._player.loadVideoById(value)
         })
     })
-    flipX.forEach(function (element, i) {                                                       // these didn't work in 
+    flipX.forEach(function (element, i) {                                                       // these didn't work in
         element.onChange(function (value) {                                                     // the above for loop
-            frames[i].classList.toggle("flipX");                                                // but they work great 
-        })                                                                                      // like this, so 
+            frames[i].classList.toggle("flipX");                                                // but they work great
+        })                                                                                      // like this, so
     });
     flipY.forEach(function (element, i) {
         element.onChange(function (value) {
@@ -117,7 +118,7 @@ frames.forEach(function (element, i) {
     });
 });
 
-makeDatGUI();   
+makeDatGUI();
 
 // move values from our value wrapper that plays nice with dat.gui to actual CSS values
 var updateValues = setInterval(function () {

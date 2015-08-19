@@ -5,11 +5,8 @@ function getQueryParameters (str) {
                 .map(function (n) { return n = n.split("="), this[n[0]] = n[1], this }.bind({}))[0];
 }
 
-// modifying CSS values with dat.gui is hard because it won't initialize numerical controls normally,
-// based on element.style.property returning a string representation of the number, so this is here,
-// and it polls on a setInterval to update stuff from dat.gui to the FX.  doesn't seem impact performance much
 var guiDataWrapper = function () {
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 0; i <= 2; i++) {
         this[i] = {
             videoId: "",
             opacity : 0.69,
@@ -33,21 +30,22 @@ var opts = new guiDataWrapper();
 
 function updateFilter(layer, filters) {
     layer.style.webkitFilter =
-        `hue-rotate(${filters.hueRotate}deg) ` +
-        `brightness(${filters.brightness}) ` +
-        `saturate(${filters.saturation}) ` +
-        `contrast(${filters.contrast}) ` +
-        `blur(${filters.blur})`
+        `hue-rotate(${filters.hueRotate}deg)
+         brightness(${filters.brightness})
+         saturate(${filters.saturation})
+         contrast(${filters.contrast})
+         blur(${filters.blur})`
 }
 
 function makeDatGUI() {
     gui = new dat.GUI();
-    var flipX = [];                             // arrays so we can establish seperate event handlers
-    var flipY = [];                             // for the flip X and flip Y controls
-    var idFields = [];
-    for (var i = 1; i <= 3; i++) {
+    
+    var flipModes = [],
+        idFields = [];
+        
+    for (var i = 0; i <= 2; i++) {
         var v = gui.addFolder('video ' + i);
-        idFields[i-1] = v.add(opts[i], 'videoId').name("video id / url");
+        idFields[i] = v.add(opts[i], 'videoId').name("video id / url");
         v.add(opts[i], 'opacity', 0, 1).name("opacity");
         v.add(opts[i], 'blendMode',
             ["screen", "multiply", "soft-light", "hard-light", "hue", "overlay",
@@ -57,9 +55,7 @@ function makeDatGUI() {
         v.add(opts[i], 'playSpeed', [0.25, 0.5, 1, 1.25, 1.5, 2]).name("play speed");
         v.open();
 
-        var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
-        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");
-        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");
+        flipModes[i] = v.add(opts[i], 'flipMode', ['', 'X', 'Y', 'Z']).name('flip mode');
 
         var filters = v.addFolder('filters');                                                   // filters all go under this
         filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
@@ -69,8 +65,8 @@ function makeDatGUI() {
         filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
     }
 
-    idFields.forEach(function (element, i) {                                                    // these events handle
-        element.onFinishChange(function (value) {                                               // live video loading
+    idFields.forEach((element, i) => {                                                    // these events handle
+        element.onFinishChange((value) => {                                               // live video loading
             if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
                 value = /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
             }
@@ -80,16 +76,21 @@ function makeDatGUI() {
             frames[i]._player.loadVideoById(value)
         })
     })
-    flipX.forEach(function (element, i) {                                                       // these didn't work in
-        element.onChange(function (value) {                                                     // the above for loop
-            frames[i].classList.toggle("flipX");                                                // but they work great
-        })                                                                                      // like this, so
+    filterValues.forEach((element, i) => {
+        element.__controllers.forEach((controller, n) => {
+            controller.onChange((value) => { updateFilter(frames[i], opts[i].filters) });
+        });
     });
-    flipY.forEach(function (element, i) {
-        element.onChange(function (value) {
-            frames[i].classList.toggle("flipY");
-        })
-    })
+    
+    var flipEnum = {
+        ""  : "rotate3d(0, 0, 0, 180deg)",
+        "X" : "rotate3d(1, 0, 0, 180deg)",
+        "Y" : "rotate3d(0, 1, 0, 180deg)",
+        "Z" : "rotate3d(0, 0, 1, 180deg)"
+    }
+    flipModes.forEach((element, i) => {
+        element.onChange((value) => { frames[i].style.transform = flipEnum[value] });
+    });
 }
 
 var videoDefaults = ["ggLTPyRXUKc", "ZC5U9Pwd0kg", "A9grEa_zSIc"];
@@ -102,16 +103,17 @@ if (params.ids === undefined) {
 }
 
 // assign videos to layers and mute them when they load
-var frames = Array.prototype.slice.call(document.querySelectorAll('google-youtube'));
-frames.forEach(function (element, i) {
-    opts[i+1].videoId = element.videoId = IDs[i];
-    element.addEventListener("google-youtube-ready", function () {
+var frames = Array.from(document.querySelectorAll('google-youtube'));
+
+frames.forEach((element, i) => {
+    opts[i].videoId = element.videoId = IDs[i];
+    element.addEventListener("google-youtube-ready", () => {
         console.log("player " + i + " ready");
-        element._player.setLoop(true)                               // why doesn't this work, seriously ?
+        element._player.setLoop(true);                               // why doesn't this work, seriously ?
         element.mute();
     });
     // actual working looping
-    element.addEventListener("google-youtube-state-change", function (value) {
+    element.addEventListener("google-youtube-state-change", (value) => {
         if (value.detail.data === 0) {
             this.play();                                            // play on end to loop
         }
@@ -122,11 +124,11 @@ makeDatGUI();
 
 // move values from our value wrapper that plays nice with dat.gui to actual CSS values
 var updateValues = setInterval(function () {
-    for (var i = 1; i <= 3; i++) {
-        frames[i-1].style.opacity = opts[i].opacity;
-        frames[i-1].style.mixBlendMode = opts[i].blendMode;
-        frames[i - 1]._player.setPlaybackRate(opts[i].playSpeed);
-        updateLayerFilter(frames[i - 1], opts[i].filters)
+    for (var i = 0; i <= 2; i++) {
+        frames[i].style.opacity = opts[i].opacity;
+        frames[i].style.mixBlendMode = opts[i].blendMode;
+        frames[i]._player.setPlaybackRate(opts[i].playSpeed);
+        updateLayerFilter(frames[i], opts[i].filters)
     }
 }, 40);                                                                     // currently updates 25 times / second
 

@@ -8,6 +8,8 @@ _videodrone.gui = {
         for (var i = 0; i <= 2; i++) {
             var data = layerValues[i];
             var v = gui.addFolder('video ' + (i+1));
+
+            inputs.pauseButton[i] = v.add(data, 'pauseButton').name('||  ᵖᵃᵘˢᵉ');
             inputs.ids[i]     = v.add(data, 'videoId').name("video link / id");
             inputs.opacity[i] = v.add(data, 'opacity', 0, 1).name("opacity");
             inputs.blend[i]   = v.add(data, 'blendMode', config.blendModes).name("blend mode");
@@ -58,5 +60,18 @@ _videodrone.gui = {
                 });
             });
         });
+        inputs.pauseButton.forEach((element, i) => {
+
+            element.onChange((value) => {
+                var paused = layerValues[i].paused === true;
+                var method = paused ? 'play' : 'pause';
+
+                layerValues[i].paused = paused == true ? false : true;
+                var label  = layerValues[i].paused == true ? '▶  ᵖˡᵃʸ' : '||  ᵖᵃᵘˢᵉ';
+
+                element.name(label);
+                frames[i][method]();
+            });
+        })
     }
 }

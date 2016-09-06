@@ -21,7 +21,8 @@ _videodrone = {
                 filterDefaults,
                 filterDefaults,
                 filterDefaults
-            ]
+            ],
+            pauseButton: []
         },
 
         defaultLayerSettings: {
@@ -39,7 +40,9 @@ _videodrone = {
                 contrast : 1,
                 saturation : 1,
                 brightness : 1,
-            }
+            },
+            paused: false,
+            pauseButton: function(){}
         },
 
         blendModes: [

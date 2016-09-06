@@ -18,7 +18,7 @@
     "branch": "master",
     "commit": "6863419d225506c822d87b01c35706133002c40d"
   },
-  "_source": "git://github.com/xinming/bower-dat-gui.git",
+  "_source": "https://github.com/xinming/bower-dat-gui.git",
   "_target": "*",
   "_originalSource": "dat.gui",
   "_direct": true

@@ -16,9 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
-
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../iron-localstorage.html">
 
 </head>
@@ -82,6 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('set value', function() {
         var newValue = {'foo': 'zot'};
         xtest.value = newValue;
+        xtest.$.localstorage.flushDebouncer('save');
         var v = window.localStorage.getItem(xtest.$.localstorage.name);
         v = JSON.parse(v);
         assert.equal(v.foo, newValue.foo);

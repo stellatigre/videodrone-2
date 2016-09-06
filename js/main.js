@@ -12,7 +12,7 @@ var guiDataWrapper = function () {
     for (var i = 1; i <= 3; i++) {
         this[i] = {
             videoId: "",
-            opacity : 0.69,
+            opacity : i === 1 ? 1 : 0.69,    // bottom layer gets full opacity
             blendMode : "screen",
             playSpeed : 1,
             flipX : false,

@@ -61,9 +61,9 @@ function makeDatGUI() {
         flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");
 
         var filters = v.addFolder('filters');                                                   // filters all go under this
-        filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
-        filters.add(opts[i].filters, 'contrast', 0, 10).step(0.1).name("contrast");
-        filters.add(opts[i].filters, 'brightness', 0, 10).step(0.1).name("brightness");
+        filters.add(opts[i].filters, 'saturation', 0, 5).step(0.1).name("saturation");
+        filters.add(opts[i].filters, 'contrast', 0, 5).step(0.1).name("contrast");
+        filters.add(opts[i].filters, 'brightness', 0, 5).step(0.1).name("brightness");
         filters.add(opts[i].filters, 'hueRotate', 0, 360).step(1).name("hue");
         filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
     }

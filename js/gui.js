@@ -9,9 +9,6 @@ _videodrone.gui = {
             var data = layerValues[i];
             var v = gui.addFolder('video ' + (i+1));
 
-            data.pauseButton = function() {
-                //data[i].paused = data[i].paused ? false : true;
-            }
             inputs.pauseButton[i] = v.add(data, 'pauseButton').name('||  ᵖᵃᵘˢᵉ');
             inputs.ids[i]     = v.add(data, 'videoId').name("video link / id");
             inputs.opacity[i] = v.add(data, 'opacity', 0, 1).name("opacity");

@@ -15,10 +15,10 @@ _videodrone.utils = {
     },
     parseVideoID: function parseVideoID(link) {
         if (/youtube\.com\/watch\?v=*/.test(link) === true) {                              // try to support full links
-            return /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
+            return /watch\?v=([a-zA-Z0-9-_]*)/.exec(link)[1];
         }
         else if (/youtu\.be/.test(link) === true) {
-            return /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];
+            return /\.be\/([a-zA-Z0-9-_]*)/.exec(link)[1];
         }
         else return '';
     },

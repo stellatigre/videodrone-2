@@ -22,6 +22,7 @@ _videodrone = {
                 filterDefaults,
                 filterDefaults
             ],
+            muted: [],
             pauseButton: []
         },
 
@@ -41,6 +42,7 @@ _videodrone = {
                 saturation : 1,
                 brightness : 1,
             },
+            muted: false,
             paused: false,
             pauseButton: function(){}
         },
@@ -63,7 +65,7 @@ _videodrone = {
         videoDefaults: [
             "ggLTPyRXUKc",
             "ZC5U9Pwd0kg",
-            "A9grEa_zSIc"
+            "N9wsjroVlu8"           // office space printer scene
         ]
     }
 }

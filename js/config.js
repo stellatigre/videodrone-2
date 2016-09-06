@@ -42,6 +42,7 @@ _videodrone = {
                 saturation : 1,
                 brightness : 1,
             },
+            muted: false,
             paused: false,
             pauseButton: function(){}
         },

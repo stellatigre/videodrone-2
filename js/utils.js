@@ -1,6 +1,6 @@
 var config = _videodrone.config;
 
-_utils = {
+_videodrone.utils = {
     getQueryParameters: function getQueryParameters (str) {
         return (str || document.location.search).replace(/(^\?)/, '').split("&")
                     .map(function (n) { return n = n.split("="), this[n[0]] = n[1], this }.bind({}))[0];
@@ -28,5 +28,5 @@ _utils = {
         for (var i = 0; i <= 2; i++) {
             this[i] = config.defaultLayerSettings;
         }
-    };
+    }
 }

@@ -37,7 +37,7 @@ _videodrone.gui = {
             })
         })
         inputs.flip.y.forEach((element, i) => {
-            element.onChange((value) => frames[i].classList.toggle("flipX");
+            element.onChange((value) => frames[i].classList.toggle("flipX"));
         });
         inputs.flip.y.forEach((element, i) => {
             element.onChange((value) => frames[i].classList.toggle("flipY"));
@@ -54,7 +54,7 @@ _videodrone.gui = {
         inputs.filters.forEach((element, i) => {
             element.__controllers.forEach((control, _) => {
                 control.onChange(() => {
-                    utils.updateFilter(frames[i], layerValues[i].filters);
+                    utils.updateLayerFilter(frames[i], layerValues[i].filters);
                 });
             });
         });

@@ -22,6 +22,7 @@ _videodrone = {
                 filterDefaults,
                 filterDefaults
             ],
+            muted: [],
             pauseButton: []
         },
 

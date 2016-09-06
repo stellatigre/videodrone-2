@@ -10,6 +10,7 @@ _videodrone.gui = {
             var v = gui.addFolder('video ' + (i+1));
 
             inputs.pauseButton[i] = v.add(data, 'pauseButton').name('||  ᵖᵃᵘˢᵉ');
+            inputs.muted[i]   = v.add(data, 'muted', false).name('🔇  ᵐᵘᵗᵉᵈ ⁻ ᶜˡᶦᶜᵏ ᶠᵒʳ 🔊');
             inputs.ids[i]     = v.add(data, 'videoId').name("video link / id");
             inputs.opacity[i] = v.add(data, 'opacity', 0, 1).name("opacity");
             inputs.blend[i]   = v.add(data, 'blendMode', config.blendModes).name("blend mode");
@@ -72,6 +73,14 @@ _videodrone.gui = {
                 element.name(label);
                 frames[i][method]();
             });
-        })
+        });
+        inputs.muted.forEach((element, i) => {
+            element.onChange((value) => {
+                var method = value ? 'unMute' : 'mute';
+                var label = method === 'mute' ? '🔇  ᵐᵘᵗᵉᵈ ⁻ ᶜˡᶦᶜᵏ ᶠᵒʳ 🔊' : '🔊  ᵃᵘᵈᶦᵒ ᵒⁿ';
+                element.name(label);
+                frames[i][method](value);
+            });
+        });
     }
 }

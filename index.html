@@ -8,38 +8,14 @@
     <link rel="stylesheet" href="css/videodrone.css" />
 </head>
 <body>
-    <div id="bg-container"></div>
-    <google-youtube videoid=""
-                    height="100%"
-                    width="100%"
-                    rel="0"
-                    start="0"
-                    autoplay="1"
-                    chromeless="true"
-                    loop="1"
-                    id="v1">
-    </google-youtube>
-    <google-youtube videoid=""
-                    height="100%"
-                    width="100%"
-                    rel="0"
-                    start="0"
-                    autoplay="1"
-                    chromeless="true"
-                    loop="1"
-                    id="v2">
-    </google-youtube>
-    <google-youtube videoid=""
-                    height="100%"
-                    width="100%"
-                    rel="0"
-                    start="0"
-                    autoplay="1"
-                    chromeless="true"
-                    loop="1"
-                    id="v3">
-    </google-youtube>
+    <google-youtube height="100%" width="100%" autoplay="1" chromeless="true" loop="1"/>
+    <google-youtube height="100%" width="100%" autoplay="1" chromeless="true" loop="1"/>
+    <google-youtube height="100%" width="100%" autoplay="1" chromeless="true" loop="1"/>
+
     <script src="bower_components/dat.gui/dat.gui.min.js"></script>
+    <script src="js/config.js" ></script>
+    <script src="js/utils.js" ></script>
+    <script src="js/gui.js" ></script>
     <script src="js/main.js" ></script>
 </body>
 </html>

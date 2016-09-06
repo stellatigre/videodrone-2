@@ -58,7 +58,7 @@ _videodrone = {
             "color-dodge"
         ],
 
-        speeds: [0, 0.25, 0.5, 1, 1.25, 1.5, 2],
+        speeds: [0.25, 0.5, 1, 1.25, 1.5, 2],
 
         videoDefaults: [
             "ggLTPyRXUKc",

@@ -27,6 +27,10 @@ _videodrone.utils = {
     guiValueContainer: function guiValueContainer() {
         for (var i = 0; i <= 2; i++) {
             this[i] = config.defaultLayerSettings;
+            this[i].pause = function() {
+                console.log("huh?", i);
+                frames[i].pause();
+            }
         }
     }
 }

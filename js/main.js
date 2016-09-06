@@ -39,7 +39,7 @@ function updateLayerFilter(layer, filters) {
         .replace("blur(0", "blur(" + filters.blur);
 }
 
-function makeDatGUI() { 
+function makeDatGUI() {
     gui = new dat.GUI();
     var flipX = [];                             // arrays so we can establish seperate event handlers
     var flipY = [];                             // for the flip X and flip Y controls
@@ -57,32 +57,32 @@ function makeDatGUI() {
         v.open();
 
         var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
-        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");                                         
-        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");                                         
+        flipX[i-1] = flipModes.add(opts[i], 'flipX').name("vertical");
+        flipY[i-1] = flipModes.add(opts[i], 'flipY').name("horizontal");
 
         var filters = v.addFolder('filters');                                                   // filters all go under this
-        filters.add(opts[i].filters, 'saturation', 0, 10).step(0.1).name("saturation");
-        filters.add(opts[i].filters, 'contrast', 0, 10).step(0.1).name("contrast");
-        filters.add(opts[i].filters, 'brightness', 0, 10).step(0.1).name("brightness");
+        filters.add(opts[i].filters, 'saturation', 0, 5).step(0.1).name("saturation");
+        filters.add(opts[i].filters, 'contrast', 0, 5).step(0.1).name("contrast");
+        filters.add(opts[i].filters, 'brightness', 0, 5).step(0.1).name("brightness");
         filters.add(opts[i].filters, 'hueRotate', 0, 360).step(1).name("hue");
         filters.add(opts[i].filters, 'blur', 0, 20).step(1).name("blur");
     }
 
-    idFields.forEach(function (element, i) {                                                    // these events handle 
+    idFields.forEach(function (element, i) {                                                    // these events handle
         element.onFinishChange(function (value) {                                               // live video loading
             if (/youtube\.com\/watch\?v=*/.test(value) === true) {                              // try to support full links
                 value = /watch\?v=([a-zA-Z0-9-_]*)/.exec(value)[1];
-            } 
+            }
             else if (/youtu\.be/.test(value) === true) {
-                value = /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];    
-            }                                                                                              
+                value = /\.be\/([a-zA-Z0-9-_]*)/.exec(value)[1];
+            }
             frames[i]._player.loadVideoById(value)
         })
     })
-    flipX.forEach(function (element, i) {                                                       // these didn't work in 
+    flipX.forEach(function (element, i) {                                                       // these didn't work in
         element.onChange(function (value) {                                                     // the above for loop
-            frames[i].classList.toggle("flipX");                                                // but they work great 
-        })                                                                                      // like this, so 
+            frames[i].classList.toggle("flipX");                                                // but they work great
+        })                                                                                      // like this, so
     });
     flipY.forEach(function (element, i) {
         element.onChange(function (value) {
@@ -117,7 +117,7 @@ frames.forEach(function (element, i) {
     });
 });
 
-makeDatGUI();   
+makeDatGUI();
 
 // move values from our value wrapper that plays nice with dat.gui to actual CSS values
 var updateValues = setInterval(function () {
@@ -128,5 +128,3 @@ var updateValues = setInterval(function () {
         updateLayerFilter(frames[i - 1], opts[i].filters)
     }
 }, 40);                                                                     // currently updates 25 times / second
-
-

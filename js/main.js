@@ -12,7 +12,7 @@ var guiDataWrapper = function () {
     for (var i = 1; i <= 3; i++) {
         this[i] = {
             videoId: "",
-            opacity : i === 1 ? 1 : 0.69,    // bottom layer gets full opacity
+            opacity : 0.69,    
             blendMode : "screen",
             playSpeed : 1,
             flipX : false,
@@ -31,12 +31,12 @@ var guiDataWrapper = function () {
 var opts = new guiDataWrapper();
 
 function updateLayerFilter(layer, filters) {
-    layer.style.webkitFilter = "hue-rotate(0deg) blur(0px) contrast(1) saturate(1) brightness(1)"
-        .replace("hue-rotate(0", "hue-rotate(" + filters.hueRotate)
-        .replace("brightness(1", "brightness(" + filters.brightness)
-        .replace("saturate(1", "saturate(" + filters.saturation)
-        .replace("contrast(1", "contrast(" + filters.contrast)
-        .replace("blur(0", "blur(" + filters.blur);
+  layer.style.webkitFilter =
+      `hue-rotate(${filters.hueRotate}deg) `+
+      `brightness(${filters.brightness}) ` +
+      `saturate(${filters.saturation}) ` +
+      `contrast(${filters.contrast}) ` +
+      `blur(${filters.blur}px)`;
 }
 
 function makeDatGUI() {

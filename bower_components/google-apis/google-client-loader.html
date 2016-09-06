@@ -33,12 +33,8 @@ For loading `gapi.client` libraries
       });
     </script>
 
+@demo
 -->
-<dom-module id="google-client-loader">
-  <template>
-    <google-js-api on-js-api-load="_loadClient"></google-js-api>
-  </template>
-</dom-module>
 
 <script>
   (function() {
@@ -76,13 +72,11 @@ For loading `gapi.client` libraries
          * You can find the full list of APIs on the
          * <a href="https://developers.google.com/apis-explorer"> Google APIs
          * Explorer</a>.
-         * @required
          */
         name: String,
 
         /**
          * Version of the API to load, e.g. 'v1'.
-         * @required
          */
         version: String,
 
@@ -97,7 +91,7 @@ For loading `gapi.client` libraries
          * 'http://localhost:8080/_ah/api'.
          * Overrides 'appId' if both are specified.
          */
-        root: String,
+        apiRoot: String,
 
         /**
          * Name of the event fired when API library is loaded.
@@ -116,13 +110,16 @@ For loading `gapi.client` libraries
         }
       },
 
+      hostAttributes: {
+        hidden: true // remove from rendering tree.
+      },
+
       // Used to fix events potentially being fired multiple times by
       // iron-jsonp-library.
       _waiting: false,
 
       /**
        * Returns the loaded API.
-       * @type gapi.client
        */
       get api() {
         if (window.gapi && window.gapi.client &&
@@ -138,6 +135,15 @@ For loading `gapi.client` libraries
        */
       get auth() {
         return gapi.auth;
+      },
+
+      ready: function() {
+        this._loader = document.createElement('google-js-api');
+        this.listen(this._loader, 'js-api-load', '_loadClient');
+      },
+
+      detached: function() {
+        this.unlisten(this._loader, 'js-api-load', '_loadClient');
       },
 
       _loadClient: function() {
@@ -205,12 +211,12 @@ For loading `gapi.client` libraries
                 this._createSelfRemovingListener(this.errorEventName));
           // Did we get an error when we tried to load this API before?
           } else if (_statuses[this.name] == 'error') {
-            this._fireError();
+            this._fireError(null);
           // Otherwise, looks like we're loading a new API.
           } else {
             var root;
-            if (this.root) {
-              root = this.root
+            if (this.apiRoot) {
+              root = this.apiRoot;
             } else if (this.appId) {
               root = 'https://' + this.appId + '.appspot.com/_ah/api';
             }

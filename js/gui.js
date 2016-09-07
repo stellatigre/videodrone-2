@@ -15,8 +15,7 @@ _videodrone.gui = {
             inputs.opacity[i] = v.add(data, 'opacity', 0, 1).name("opacity");
             inputs.blend[i]   = v.add(data, 'blendMode', config.blendModes).name("blend mode");
             inputs.speed[i]   = v.add(data, 'playSpeed', config.speeds).name("play speed");
-            inputs.flip.x[i] = v.add(data.flip, 'x').name("flip X");
-            inputs.flip.y[i] = v.add(data.flip, 'y').name("flip Y");
+            inputs.flip[i]    = v.add(data, 'flip', ['none', 'X', 'Y', 'Z']).name('flip mode');
             v.open();
 
             var filters = v.addFolder('filters');                                                   // filters all go under this
@@ -33,16 +32,14 @@ _videodrone.gui = {
 
     // make all our gui's value update events update their associated element property
     setUpdateEvents: function setUpdateEvents(inputs, frames) {
-        inputs.ids.forEach((element, i) => {
-            element.onFinishChange((text) => {
-                frames[i]._player.loadVideoById(utils.parseVideoID(text));
-            })
-        })
-        inputs.flip.y.forEach((element, i) => {
-            element.onChange((value) => frames[i].classList.toggle("flipX"));
-        });
-        inputs.flip.y.forEach((element, i) => {
-            element.onChange((value) => frames[i].classList.toggle("flipY"));
+        var flipEnum = {
+            "none" : "rotate3d(0, 0, 0, 180deg)",
+            "X" : "rotate3d(1, 0, 0, 180deg)",
+            "Y" : "rotate3d(0, 1, 0, 180deg)",
+            "Z" : "rotate3d(0, 0, 1, 180deg)"
+        }
+        inputs.flip.forEach((element, i) => {
+            element.onChange((value) => { frames[i].style.transform = flipEnum[value] });
         });
         inputs.blend.forEach((element, i) => {
             element.onChange((value) => frames[i].style.mixBlendMode = value );
@@ -60,6 +57,11 @@ _videodrone.gui = {
                 });
             });
         });
+        inputs.ids.forEach((element, i) => {
+            element.onFinishChange((text) => {
+                frames[i]._player.loadVideoById(utils.parseVideoID(text));
+            })
+        })
         inputs.pauseButton.forEach((element, i) => {
             element.onChange((value) => {
                 var paused = layerValues[i].paused === true;

@@ -9,17 +9,15 @@ _videodrone.gui = {
             var data = layerValues[i];
             var v = gui.addFolder('video ' + (i+1));
 
-            inputs.pauseButton[i] = v.add(data, 'pauseButton').name('||  ᵖᵃᵘˢᵉ');
-            inputs.muted[i]   = v.add(data, 'muted', false).name('🔇  ᵐᵘᵗᵉᵈ ⁻ ᶜˡᶦᶜᵏ ᶠᵒʳ 🔊');
+            inputs.pauseButton[i] = v.add(data, 'pauseButton').name('||  pause');
+            inputs.muted[i]   = v.add(data, 'muted', false).name('🔇  muted');
             inputs.ids[i]     = v.add(data, 'videoId').name("video link / id");
             inputs.opacity[i] = v.add(data, 'opacity', 0, 1).name("opacity");
             inputs.blend[i]   = v.add(data, 'blendMode', config.blendModes).name("blend mode");
             inputs.speed[i]   = v.add(data, 'playSpeed', config.speeds).name("play speed");
+            inputs.flip.x[i] = v.add(data.flip, 'x').name("flip X");
+            inputs.flip.y[i] = v.add(data.flip, 'y').name("flip Y");
             v.open();
-
-            var flipModes = v.addFolder('flip mode');                                               // all transform effects go here
-            inputs.flip.x[i] = flipModes.add(data.flip, 'x').name("vertical");
-            inputs.flip.y[i] = flipModes.add(data.flip, 'y').name("horizontal");
 
             var filters = v.addFolder('filters');                                                   // filters all go under this
             filters.add(data.filters, 'saturation', 0, 5).step(0.1).name("saturation");
@@ -28,6 +26,7 @@ _videodrone.gui = {
             filters.add(data.filters, 'hue', 0, 360).step(1).name("hue");
             filters.add(data.filters, 'blur', 0, 20).step(1).name("blur");
             inputs.filters[i] = filters;
+            filters.open();
         }
         return inputs;
     },
@@ -62,13 +61,12 @@ _videodrone.gui = {
             });
         });
         inputs.pauseButton.forEach((element, i) => {
-
             element.onChange((value) => {
                 var paused = layerValues[i].paused === true;
                 var method = paused ? 'play' : 'pause';
 
                 layerValues[i].paused = paused == true ? false : true;
-                var label  = layerValues[i].paused == true ? '▶  ᵖˡᵃʸ' : '||  ᵖᵃᵘˢᵉ';
+                var label  = layerValues[i].paused == true ? '▶  play' : '||  pause';
 
                 element.name(label);
                 frames[i][method]();
@@ -77,7 +75,7 @@ _videodrone.gui = {
         inputs.muted.forEach((element, i) => {
             element.onChange((value) => {
                 var method = value ? 'unMute' : 'mute';
-                var label = method === 'mute' ? '🔇  ᵐᵘᵗᵉᵈ ⁻ ᶜˡᶦᶜᵏ ᶠᵒʳ 🔊' : '🔊  ᵃᵘᵈᶦᵒ ᵒⁿ';
+                var label = method === 'mute' ? '🔇  muted' : '🔊 audio on';
                 element.name(label);
                 frames[i][method](value);
             });

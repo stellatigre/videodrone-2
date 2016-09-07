@@ -1,7 +1,7 @@
 ﻿body {
     overflow:hidden;
     padding: 0;
-    margin: 0; 
+    margin: 0;
 }
 
 google-youtube {
@@ -12,18 +12,6 @@ google-youtube {
     height:100%;
 }
 
-v1{
-    opacity: 1.00;
-}
-
-v2{
-    opacity: 0.50;
-}
-
-v3{
-    opacity: 0.40;
-}
-
 .flipY {
     transform: rotateY(180deg);
 }
@@ -32,52 +20,17 @@ v3{
     transform: rotateX(180deg);
 }
 
-/*
-@-webkit-keyframes bg-colorchange {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-@-moz-keyframes bg-colorchange {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-*/
-
-@keyframes bg-colorchange { 
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-
-#bg-container {
-    background: linear-gradient(270deg, #e425bb, #00b9ff, #5707dd, #ff5e79, #00fdd2);
-    background-size: 1000% 1000%;
-    -webkit-animation: bg-colorchange 59s ease infinite;
-    -moz-animation: bg-colorchange 59s ease infinite;
-    animation: bg-colorchange 59s ease infinite;
-}
-
 .dg.main {
     margin-right: 0px;
 }
 
-/*div.dg.ac ul {
-    opacity: 0.8;
-}*/
-
-/*.dg .c select {
-    opacity:0.88;
-}*/
-
 .dg .cr {
-    opacity: 0.58;
+    opacity: 0.33;
 }
 
 option {
     background-color: #C2C2C2;
-    opacity: 0.75;
+    opacity: 0.50;
 }
 
 .close-button {
@@ -85,7 +38,12 @@ option {
 }
 
 li.title {
-    opacity: 0.5;
+    opacity: 0.33;
+}
+
+li {
+    font-size: 12px;
+    font-family:monospace;
 }
 
 .wtf {
@@ -100,5 +58,20 @@ li.title {
   }
   50% {
     -webkit-filter: brightness(2) hue-rotate(180deg) saturate(4) blur(2px);
+  }
+}
+
+.contrastPulse {
+  animation: contrastPulse 8s ease-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes contrastPulse {
+  0%,
+  100% {
+    -webkit-filter: brightness(1.1) saturate(1.5) contrast(1);
+  }
+  50% {
+    -webkit-filter: brightness(1.3) saturate(3) contrast(4);
   }
 }

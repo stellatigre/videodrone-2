@@ -13,10 +13,7 @@ _videodrone = {
             opacity: [],
             blend: [],
             speed: [],
-            flip : {
-                x: [],
-                y: []
-            },
+            flip : [],
             filters: [
                 filterDefaults,
                 filterDefaults,
@@ -31,10 +28,7 @@ _videodrone = {
             opacity : 0.69,
             blendMode : "screen",
             playSpeed : 1,
-            flip: {
-                x: false,
-                y: false
-            },
+            flip: 'none',
             filters : {
                 hue : 0,
                 blur : 0,
